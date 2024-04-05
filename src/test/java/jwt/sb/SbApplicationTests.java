@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -51,7 +53,7 @@ class SbApplicationTests {
 	}
 
 	@Test
-	@DisplayName("JWT Provider")
+	@DisplayName("Test JWT Provider")
 	void testSecretKey() {
 		SecretKey secretKey1 = this.jwtProvider.getSecretKey();
 		SecretKey secretKey2 = this.jwtProvider.getSecretKey();
@@ -60,9 +62,24 @@ class SbApplicationTests {
 		System.out.println(secretKey2);
 	}
 
+	@Test
+	@DisplayName("Create Access Token")
+	void test6 () {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("id", 1L);
+		claims.put("username", "user1");
+
+		String accessToken = jwtProvider.genToken(claims, 60 * 60 * 3);
+
+		System.out.println("accessToken : " + accessToken);
+
+		assertThat(accessToken).isNotNull();
+	}
+
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
