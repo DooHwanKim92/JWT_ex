@@ -17,17 +17,24 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 class SbApplicationTests {
 
 	@Value("${custom.jwt.secretkey}")
-	private String secretKey;
+	private String originSecretKey;
 
 	@Test
-	@DisplayName("Check Secret Key")
+	@DisplayName("Check the secret key")
 	void checkSecretKey() {
-		String keyBase64Encoded = Base64.getEncoder().encodeToString(secretKey.getBytes());
+		assertThat(originSecretKey).isNotNull();
+	}
+
+	@Test
+	@DisplayName("Secret key encoding test")
+	void encodeSecretKey() {
+		System.out.println("Original SecretKey : " + originSecretKey);
+		String keyBase64Encoded = Base64.getEncoder().encodeToString(originSecretKey.getBytes());
 
 		SecretKey testSecretKey = Keys.hmacShaKeyFor(keyBase64Encoded.getBytes());
 
 		assertThat(testSecretKey).isNotNull();
-		System.out.println(testSecretKey);
+		System.out.println("Encoded SecretKey : " + testSecretKey);
 	}
 
 
